@@ -1,0 +1,101 @@
+---
+description: "Cross-reference map of topics the examiner commonly combines in questions"
+globs:
+alwaysApply: true
+---
+
+# Cross-Reference Map — Examiner Topic Combinations
+
+This rule surfaces the patterns from 333 past paper questions so the student doesn't have to sift through 500 pages herself. Use this when explaining topics, suggesting practice questions, or identifying connections.
+
+## Topic Frequency Analysis
+
+### Section A — Most Tested Factual Topics
+| Rank | Topic Category | Question Count | Chapter |
+|------|---------------|----------------|---------|
+| 1 | UK regulatory structure | 52 questions | Ch1 (20%) |
+| 2 | High-level standards (PRIN/SYSC/SM&CR) | 26 questions | Ch2 (40%) |
+| 3 | Conduct of business (COBS) | 21+ questions | Ch2 (40%) |
+| 4 | Financial promotions | 13 questions | Ch2 (40%) |
+| 5 | Market conduct (MAR/insider dealing) | 10 questions | Ch3 (20%) |
+| 6 | Markets and exchanges | 8 questions | Ch4 (2.5%) |
+| 7 | Complaints and compensation | 8 questions | Ch2 (40%) |
+| 8 | Enforcement and discipline | 7-10 questions | Ch2 (40%) |
+| 9 | Money laundering / financial crime | 7 questions | Ch3 (20%) |
+| 10 | Client assets | 5 questions | Ch2 (40%) |
+| 11 | Takeover Code / Listing Rules | 4 questions | Ch3 (20%) |
+| 12 | MiFID / international | 9 questions | Ch1/Ch5 |
+
+### Section B — The Compulsory Question Pattern
+25 compulsory questions identified: B14, B16, B18, B21, B26, B32, B35, B38, B42, B50, B52, B55, B58, B61, B65, B67, B69, B73, B78, B80, B83, B86, B89, B93, B95.
+
+**The compulsory B question (always Q11 in the exam) tests ethics and the CISI Code of Conduct in every sitting. This is guaranteed marks if you know the Code.** See @knowledge-base/topics/risk-in-financial-services/ethics-integrity-cisi-code.md.
+
+### Section C — Recurring Essay Themes
+- Regulatory reform (Brexit, Edinburgh Reforms, FSMA 2023)
+- ESG / sustainability / climate risk
+- Fintech / cryptoassets
+- Conduct risk / culture
+- Market abuse enforcement
+- SM&CR and corporate governance
+
+## Common Cross-Topic Combinations in Section B Scenarios
+
+The examiner deliberately combines topics in scenarios. When explaining any of these topics, flag the connections:
+
+### Market Abuse + Insider Dealing + FSMA Part VIII + DTR
+Questions: B8, B9, B11, B42 (B42 is compulsory)
+Files: @market-abuse-mar.md + @insider-dealing.md + @listing-rules-dtr.md + @fsma-regulated-activities.md
+
+### Conflicts of Interest + Chinese Walls + Inducements + Ethics
+Questions: B12, B14, B26 (B14 and B26 are compulsory)
+Files: @sysc-conflicts-remuneration.md + @cobs-obligations-inducements.md + @ethics-integrity-cisi-code.md
+
+### Financial Promotions + s21 FSMA + COBS 4 + CIS/Authorisation
+Questions: B10, B13, B16 (B16 is compulsory)
+Files: @cobs-financial-promotions.md + @fsma-regulated-activities.md
+
+### Client Classification + Suitability + Appropriateness
+Questions: B3, B17, B35 (B35 is compulsory)
+Files: @cobs-client-categorisation.md + @cobs-suitability-appropriateness.md + @consumer-duty.md
+
+### Money Laundering + Bribery + Terrorism + KYC + Governance
+Questions: B32 (compulsory)
+Files: @money-laundering-poca-mlr.md + @bribery-act.md + @financial-crime-terrorism-sanctions.md
+
+### SM&CR + Governance + Culture + Whistleblowing + Data Protection
+Questions: B69, B82, B95 (B95 is compulsory)
+Files: @smcr-senior-managers.md + @data-protection-whistleblowing.md + @compliance-function-principles.md
+
+### Enforcement + Disciplinary Process + Fitness and Propriety
+Questions: B13, B39, B58, B83 (B58 and B83 are compulsory)
+Files: @depp-enforcement-penalties.md + @threshold-conditions-fitness-tc.md
+
+## Workbook Cross-References
+
+These chapters reference each other extensively:
+- Ch1 ↔ Ch2: regulatory structure ↔ FCA objectives and supervision
+- Ch1 ↔ Ch3: FSMA Part VIII ↔ market abuse and insider dealing
+- Ch2 ↔ Ch3: SYSC 18 ↔ whistleblowing provisions
+- Ch2 ↔ Ch5: SM&CR ↔ SM&CR review / regulatory reform
+- Ch2 ↔ Ch6: compliance function (SYSC 6) ↔ BIS 10 principles and ethics
+
+## High-ROI Study Targets
+
+If you only have limited time, study these topics first (highest frequency + highest exam weight):
+
+1. **CISI Code of Conduct** (Ch6, 15%) — tested in EVERY compulsory B question
+2. **SM&CR** (Ch2, 40%) — prescribed responsibilities, certification, conduct rules
+3. **FSMA general prohibition and regulated activities** (Ch1, 20%) — 52 Section A questions
+4. **PRIN / Principles for Businesses** (Ch2, 40%) — including Consumer Duty (Principle 12)
+5. **SYSC systems and controls** (Ch2, 40%) — compliance function, conflicts, outsourcing
+6. **Market abuse / insider dealing** (Ch3, 20%) — MAR, CJA 1993, defences
+7. **Financial promotions** (Ch2, 40%) — s21, COBS 4, social media, cryptoassets
+8. **Client categorisation and suitability** (Ch2, 40%) — COBS 3, 9/9A
+9. **Money laundering / POCA / MLR** (Ch3, 20%) — three stages, SARs, JMLSG
+10. **Enforcement / DEPP** (Ch2, 40%) — RDC, notices, penalties framework
+11. **BIS 10 compliance principles** (Ch6, 15%) — board and management responsibilities
+12. **Complaints / FOS / FSCS** (Ch2, 40%) — procedures, timings, compensation limits
+13. **Takeover Code general principles** (Ch3, 20%) — six principles, mandatory offer
+14. **Bribery Act** (Ch3, 20%) — s7 corporate liability, adequate procedures
+15. **Conflicts of interest** (Ch2, 40%) — SYSC 10, information barriers

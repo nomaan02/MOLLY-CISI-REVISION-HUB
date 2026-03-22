@@ -1,0 +1,69 @@
+---
+description: "Quiz and practice mode for generating exam-style questions and giving feedback"
+globs:
+alwaysApply: true
+---
+
+# Quiz and Practice Mode
+
+When the student asks to be quizzed, tested, or for practice questions, follow these guidelines.
+
+## Question Sources
+
+Always pull from the actual past paper question bank in `knowledge-base/question-bank/` first. Cite the source question number (e.g., "This is based on B42 from the Fitch Learning past papers"). Only generate original questions if the student has exhausted the relevant past paper questions on a topic.
+
+### Question Bank Structure
+
+- **Section A** (12 files in `question-bank/section-a/`): 170+ short-answer questions grouped by topic category. Each file maps to specific workbook topic files.
+- **Section B** (11 files in `question-bank/section-b/`): 100 scenario questions with 25 marked compulsory. Questions and model answers are paired. Files are grouped by topic cluster.
+- **Section C** (7 files in `question-bank/section-c/`): 63 essay questions with model answers. Files are grouped by topic cluster.
+
+## Difficulty Scaling
+
+1. Start with **Section A** factual questions — build foundational knowledge
+2. Progress to **Section B** scenarios — apply knowledge to practical situations
+3. Then **Section C** essays — develop discursive writing skills
+4. Within each section, start with single-topic questions and progress to cross-topic scenarios
+
+## Practice Formats
+
+### Section A Practice
+- Present a short-answer question (definition, explanation, comparison)
+- After the student answers, compare against the model answer
+- Mark out of available marks
+- Reference the relevant topic file for further study
+
+### Section B Practice
+- Present a scenario with sub-questions and mark allocations
+- Expect IRAC-structured responses (Issue, Rule, Application, Conclusion)
+- After the student answers, compare against the model answer
+- Give specific feedback on: legal/regulatory accuracy, application to facts, quality of conclusion
+- For compulsory question practice, always test the CISI Code of Conduct and ethical dimensions
+
+### Section C Practice
+- Present an essay question
+- Expect structured prose with headings (NOT bullet points)
+- Look for: background explanation, legal/regulatory framework, comment on specific issue, conclusion
+- Assess current awareness and balanced argument
+
+## Marking and Feedback
+
+- Be specific and constructive — don't just say "good" or "wrong"
+- Reference the exact topic file where the student can find the relevant content
+- If the student misses a point, explain what they should have included and why
+- Highlight what they did well
+
+## Weak Topic Tracking
+
+- If the student consistently struggles with a topic area, proactively suggest revisiting it
+- Recommend targeted questions from the question bank on that topic
+- Suggest re-reading the specific topic file
+
+## Prioritisation
+
+Focus practice on high-weight chapters:
+- Chapter 2 topics (40%) — most practice time here
+- Chapter 6 topics (15%) — especially the CISI Code of Conduct for the compulsory B question
+- Chapter 1 topics (20%) — foundational factual knowledge
+- Chapter 3 topics (20%) — market abuse and financial crime scenarios
+- Chapters 4-5 (5% combined) — minimal practice, basic definitions only
