@@ -1,0 +1,20 @@
+{
+  "covered": [
+    "topics/part-2-fca-handbook/sysc-conflicts-remuneration.md"
+  ],
+  "flagged": [],
+  "notes_log": {
+    "topics/part-2-fca-handbook/sysc-conflicts-remuneration.md": [
+      {
+        "text": "Test note",
+        "timestamp": "Migrated"
+      }
+    ],
+    "topics\\part-1-regulatory-framework\\european-financial-services-mifid.md": [
+      {
+        "text": "Note test note test",
+        "timestamp": "22 Mar 2026  18:07"
+      }
+    ]
+  }
+}
