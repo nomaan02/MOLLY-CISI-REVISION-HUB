@@ -9,6 +9,7 @@ from pathlib import Path
 from datetime import datetime
 import json
 import re
+import random
 
 # ─── CONFIG ───────────────────────────────────────────────────────────────────
 
@@ -56,6 +57,31 @@ SECTION_LABELS = {
     "section-b": "Section B",
     "section-c": "Section C",
 }
+
+GIFS_DIR = Path(__file__).parent / "gifs"
+
+CHEER_MESSAGES = [
+    "wwwwwWWWWOOOOOOOOOOOO. YYYYYEEEEEAAhhhhhhhhhh",
+    "Bravest button in queef ville fr",
+    "the jews would hate to see you win here babe",
+    "luv luv luv",
+    "You're gonna absolutely smash this exam.",
+    "'go molly go molly', they all cheered benevolantly",
+    "hope you like da gifs bby",
+    "You've got more determination than the FCA has regulations.(ai generated but kind of slaps)",
+    "Keep going — future you will say thanks.",
+    "SM&CR? More like SM&CRUSH IT. - lol another ai one ",
+    "#mollyisthebest",
+    "I'm so proud of my hardworking mummy - Polly, aged 6 months",
+    "wow guys wowww, shes so smart. wtf. i wish i was smart like her wowwww",
+    "love you sunshine",
+    "Every page you read is a page closer to Bristol. - Malala",
+    "deep breaths shorty locks, deep breaths",
+    "she's my hero guys. wtf. shes my hero. omg",
+    "Bristol awaits us baby!!!",
+    "BS5 6HS",
+    "I heard the FCA or compliance doesn't exists in bristol # fun fact",
+]
 
 # ─── PERSISTENT PROGRESS ─────────────────────────────────────────────────────
 
@@ -226,11 +252,22 @@ def resolve_part_key(topic_path: Path) -> str | None:
         return None
 
 
+# ─── PARTY MODE DIALOG ────────────────────────────────────────────────────────
+
+
+@st.dialog("🎉 You've got this!")
+def party_mode_popup():
+    gifs = list(GIFS_DIR.glob("*.gif"))
+    if gifs:
+        st.image(str(random.choice(gifs)), use_container_width=True)
+    st.markdown(f"**{random.choice(CHEER_MESSAGES)}**")
+
+
 # ─── PAGE CONFIG ──────────────────────────────────────────────────────────────
 
 st.set_page_config(
     page_title="CISI Revision Hub",
-    page_icon="📚",
+    page_icon="🐈‍⬛",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -301,51 +338,36 @@ section[data-testid="stSidebar"] .stRadio label {
     transition: width 0.4s ease;
 }
 
-/* ── Right-side notes panel ── */
-.notes-panel-container {
-    position: sticky;
-    top: 2rem;
-    align-self: flex-start;
-}
-.notes-panel {
-    background: #ffffff;
-    border: 1px solid #e2e4eb;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-    overflow: hidden;
-}
+/* Notes panel */
 .notes-panel-header {
     background: #4a6cf7;
     color: white;
     padding: 10px 14px;
     font-size: 0.88rem;
     font-weight: 600;
-}
-.notes-panel-body {
-    padding: 10px 14px;
-    max-height: 55vh;
-    overflow-y: auto;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
 }
 .note-entry {
     background: #f8f9fc;
     border-left: 3px solid #4a6cf7;
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.88rem;
-    line-height: 1.5;
+    padding: 6px 8px;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.84rem;
+    line-height: 1.4;
     color: #333;
 }
-.note-entry-time {
-    font-size: 0.72rem;
+.note-entry .note-ts {
+    display: block;
+    font-size: 0.7rem;
     color: #999;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 .note-empty {
     color: #aaa;
     font-size: 0.85rem;
     font-style: italic;
-    padding: 12px 0;
+    padding: 8px 0;
 }
 
 /* Notebook view */
@@ -376,8 +398,8 @@ progress = load_progress()
 
 if "visited" not in st.session_state:
     st.session_state.visited = set()
-if "nav_target" not in st.session_state:
-    st.session_state.nav_target = None
+if "active_topic" not in st.session_state:
+    st.session_state.active_topic = None
 
 
 # ─── SIDEBAR ──────────────────────────────────────────────────────────────────
@@ -385,6 +407,9 @@ if "nav_target" not in st.session_state:
 with st.sidebar:
     st.markdown("## 📚 CISI Revision Hub")
     st.caption("Level 6 · Regulation & Compliance")
+    st.markdown("---")
+
+    st.toggle("🐾 GIFs on pages", key="party_gifs")
     st.markdown("---")
 
     search_query = st.text_input("🔍 Search topics", placeholder="e.g. SMCR, market abuse")
@@ -401,6 +426,42 @@ with st.sidebar:
             st.info("No results found.")
             nav_mode = "none"
             chosen_path = None
+
+    elif st.session_state.active_topic is not None:
+        # ── Persistent direct-navigation mode ──
+        nav_mode = "active"
+        chosen_path = None
+
+        if st.button("← Back to menu", use_container_width=True):
+            st.session_state.active_topic = None
+            st.rerun()
+
+        target = st.session_state.active_topic
+        at_part_key = target.get("part")
+        if at_part_key:
+            st.markdown("---")
+            st.info(PART_SHORT_LABELS.get(at_part_key, at_part_key))
+            topics_dir = KB_ROOT / "topics"
+            part_files = collect_md_files(topics_dir / at_part_key)
+            if part_files:
+                at_topic_path = Path(target["topic_file"])
+                current_idx = next(
+                    (i for i, f in enumerate(part_files) if str(f) == str(at_topic_path)), 0
+                )
+                topic_choice = st.radio(
+                    "Other topics in this part",
+                    part_files,
+                    index=current_idx,
+                    format_func=lambda f: sidebar_topic_label(f, progress),
+                    key="active_topic_radio",
+                )
+                if str(topic_choice) != str(at_topic_path):
+                    st.session_state.active_topic = {
+                        "part": at_part_key,
+                        "topic_file": str(topic_choice),
+                    }
+                    st.rerun()
+
     else:
         nav_mode = "browse"
         chosen_path = None
@@ -417,24 +478,21 @@ with st.sidebar:
 def render_notes_panel(topic_key: str, topic_title: str, topic_path: Path | None = None,
                        part_key: str | None = None):
     """
-    Render the sticky right-side notes panel.
-    Call this INSIDE the right column of a 2-column layout.
-    Returns nothing — writes directly to the Streamlit column.
+    Render the notes panel inside the right column.
+    Input is always at the top and visible. Delete buttons are inline with notes.
     """
     entries = get_notes_for_topic(progress, topic_key)
 
     # ── Panel header ──
     st.markdown(
-        f'<div class="notes-panel">'
-        f'<div class="notes-panel-header">📝 Notes — {topic_title}</div>'
-        f'</div>',
+        f'<div class="notes-panel-header">📝 Notes — {topic_title}</div>',
         unsafe_allow_html=True,
     )
 
-    # ── Compose + Send ──
+    # ── Compose + Send (always at top, always visible) ──
     note_text = st.text_area(
         "Write a note",
-        height=100,
+        height=80,
         key=f"compose_{topic_key}",
         label_visibility="collapsed",
         placeholder="Type a note and hit Send...",
@@ -445,6 +503,7 @@ def render_notes_panel(topic_key: str, topic_title: str, topic_path: Path | None
         if st.button("📤 Send", key=f"send_{topic_key}", use_container_width=True, type="primary"):
             if note_text and note_text.strip():
                 add_note_entry(progress, topic_key, note_text)
+                st.session_state.active_topic = {"part": part_key, "topic_file": str(topic_path)}
                 st.rerun()
             else:
                 st.warning("Write something first!")
@@ -456,21 +515,25 @@ def render_notes_panel(topic_key: str, topic_title: str, topic_path: Path | None
             unsafe_allow_html=True,
         )
 
-    # ── Existing notes log (newest first) ──
+    # ── Existing notes log (newest first, delete inline) ──
     if entries:
         st.markdown("---")
         for i, entry in enumerate(reversed(entries)):
             real_idx = len(entries) - 1 - i
-            st.markdown(
-                f'<div class="note-entry">'
-                f'{entry["text"]}'
-                f'<div class="note-entry-time">{entry["timestamp"]}</div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
-            if st.button("🗑️", key=f"del_{topic_key}_{real_idx}", help="Delete this note"):
-                delete_note_entry(progress, topic_key, real_idx)
-                st.rerun()
+            ncol, dcol = st.columns([6, 1])
+            with ncol:
+                st.markdown(
+                    f'<div class="note-entry">'
+                    f'{entry["text"]}'
+                    f'<span class="note-ts">{entry["timestamp"]}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+            with dcol:
+                if st.button("🗑️", key=f"del_{topic_key}_{real_idx}", help="Delete this note"):
+                    delete_note_entry(progress, topic_key, real_idx)
+                    st.session_state.active_topic = {"part": part_key, "topic_file": str(topic_path)}
+                    st.rerun()
     else:
         st.markdown('<div class="note-empty">No notes yet — start typing above.</div>',
                     unsafe_allow_html=True)
@@ -512,7 +575,7 @@ def render_notes_panel(topic_key: str, topic_title: str, topic_path: Path | None
 # ─── RENDER: TOPIC DETAIL (2-column layout) ─────────────────────────────────
 
 def render_topic_detail(topic_path: Path, part_key: str | None = None):
-    """Render topic content on the left, sticky notes panel on the right."""
+    """Render topic content on the left, notes panel on the right."""
     key = get_topic_key(topic_path)
     title = slug_to_title(topic_path.stem)
 
@@ -567,10 +630,19 @@ def render_topic_detail(topic_path: Path, part_key: str | None = None):
         st.markdown(content)
 
     with col_notes:
-        # Sticky wrapper via CSS
-        st.markdown('<div class="notes-panel-container">', unsafe_allow_html=True)
         render_notes_panel(key, title, topic_path, part_key)
-        st.markdown('</div>', unsafe_allow_html=True)
+
+        # Party GIFs down the full length of the right column
+        if st.session_state.get("party_gifs"):
+            gifs = list(GIFS_DIR.glob("*.gif"))
+            if gifs:
+                rng = random.Random(key)
+                shuffled = rng.sample(gifs, len(gifs))
+                for gif in shuffled:
+                    st.markdown('<div style="margin-top:3rem"></div>',
+                                unsafe_allow_html=True)
+                    st.image(str(gif), use_container_width=True)
+                    st.caption(rng.choice(CHEER_MESSAGES))
 
 
 # ─── HOME DASHBOARD ─────────────────────────────────────────────────────────
@@ -622,10 +694,10 @@ def render_home():
                 st.markdown(f'<span class="badge-weight">{weight} of exam</span>', unsafe_allow_html=True)
 
             for f in part_files:
-                key = get_topic_key(f)
-                is_cov = key in progress.get("covered", [])
-                is_flag = key in progress.get("flagged", [])
-                has_notes = bool(get_notes_for_topic(progress, key))
+                fkey = get_topic_key(f)
+                is_cov = fkey in progress.get("covered", [])
+                is_flag = fkey in progress.get("flagged", [])
+                has_notes = bool(get_notes_for_topic(progress, fkey))
 
                 status = ""
                 if is_cov:
@@ -637,9 +709,9 @@ def render_home():
                 if not is_cov and not is_flag:
                     status += "⬜ "
 
-                if st.button(f"{status}{slug_to_title(f.stem)}", key=f"home_nav_{key}",
+                if st.button(f"{status}{slug_to_title(f.stem)}", key=f"home_nav_{fkey}",
                              use_container_width=True):
-                    st.session_state.nav_target = {"part": pk, "topic_file": str(f)}
+                    st.session_state.active_topic = {"part": pk, "topic_file": str(f)}
                     st.rerun()
 
     # Flagged section
@@ -652,7 +724,7 @@ def render_home():
             pk = parts[1] if len(parts) > 1 else None
             if st.button(f"🚩 {slug_to_title(Path(fkey).stem)}", key=f"flagged_nav_{fkey}",
                          use_container_width=True):
-                st.session_state.nav_target = {"part": pk, "topic_file": str(fpath)}
+                st.session_state.active_topic = {"part": pk, "topic_file": str(fpath)}
                 st.rerun()
 
 
@@ -688,8 +760,8 @@ def render_notes_notebook():
         # Check if any topic in this part has notes
         part_has_notes = False
         for f in part_files:
-            key = get_topic_key(f)
-            if get_notes_for_topic(progress, key):
+            nb_key = get_topic_key(f)
+            if get_notes_for_topic(progress, nb_key):
                 part_has_notes = True
                 break
 
@@ -700,29 +772,32 @@ def render_notes_notebook():
         st.markdown(f'<div class="notebook-part-header">{short_label}</div>', unsafe_allow_html=True)
 
         for f in part_files:
-            key = get_topic_key(f)
-            entries = get_notes_for_topic(progress, key)
+            nb_key = get_topic_key(f)
+            entries = get_notes_for_topic(progress, nb_key)
             if not entries:
                 continue
 
             title = slug_to_title(f.stem)
             with st.expander(f"{title} — {len(entries)} note{'s' if len(entries) != 1 else ''}", expanded=False):
                 # Button to jump to this topic
-                if st.button(f"📖 Open {title}", key=f"notebook_nav_{key}", use_container_width=True):
-                    st.session_state.nav_target = {"part": pk, "topic_file": str(f)}
+                if st.button(f"📖 Open {title}", key=f"notebook_nav_{nb_key}", use_container_width=True):
+                    st.session_state.active_topic = {"part": pk, "topic_file": str(f)}
                     st.rerun()
 
                 for i, entry in enumerate(entries):
-                    st.markdown(
-                        f'<div class="note-entry">'
-                        f'{entry["text"]}'
-                        f'<div class="note-entry-time">{entry["timestamp"]}</div>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
-                    if st.button("🗑️", key=f"nb_del_{key}_{i}", help="Delete this note"):
-                        delete_note_entry(progress, key, i)
-                        st.rerun()
+                    ncol, dcol = st.columns([6, 1])
+                    with ncol:
+                        st.markdown(
+                            f'<div class="note-entry">'
+                            f'{entry["text"]}'
+                            f'<span class="note-ts">{entry["timestamp"]}</span>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
+                    with dcol:
+                        if st.button("🗑️", key=f"nb_del_{nb_key}_{i}", help="Delete this note"):
+                            delete_note_entry(progress, nb_key, i)
+                            st.rerun()
 
     # Orphaned notes (keys that don't match any current topic file)
     all_topic_keys = set()
@@ -734,14 +809,14 @@ def render_notes_notebook():
     if orphaned:
         st.markdown("---")
         st.markdown("#### Other Notes")
-        for key, entries in orphaned.items():
-            title = slug_to_title(Path(key).stem)
+        for orph_key, entries in orphaned.items():
+            title = slug_to_title(Path(orph_key).stem)
             with st.expander(f"{title} — {len(entries)} note{'s' if len(entries) != 1 else ''}"):
                 for i, entry in enumerate(entries):
                     st.markdown(
                         f'<div class="note-entry">'
                         f'{entry["text"]}'
-                        f'<div class="note-entry-time">{entry["timestamp"]}</div>'
+                        f'<span class="note-ts">{entry["timestamp"]}</span>'
                         f'</div>',
                         unsafe_allow_html=True,
                     )
@@ -749,32 +824,22 @@ def render_notes_notebook():
 
 # ─── MAIN CONTENT ─────────────────────────────────────────────────────────────
 
-# Navigation target from Home / Notebook buttons
-if st.session_state.nav_target is not None:
-    target = st.session_state.nav_target
-    st.session_state.nav_target = None
+_, party_btn_col = st.columns([5, 1])
+with party_btn_col:
+    if st.button("🎉 Click me 2 cheer up xx"):
+        party_mode_popup()
 
+# ── Persistent direct navigation (from Home / Notebook / Notes buttons) ──
+if st.session_state.active_topic is not None and nav_mode == "active":
+    target = st.session_state.active_topic
     topic_path = Path(target["topic_file"])
     part_key = target.get("part")
 
     if topic_path.exists():
-        topics_dir = KB_ROOT / "topics"
-        if part_key:
-            with st.sidebar:
-                st.markdown("---")
-                st.info(f"Navigated from Home → {PART_SHORT_LABELS.get(part_key, part_key)}")
-                part_files = collect_md_files(topics_dir / part_key)
-                if part_files:
-                    topic_choice = st.radio(
-                        "Other topics in this part",
-                        part_files,
-                        index=next((i for i, f in enumerate(part_files) if str(f) == str(topic_path)), 0),
-                        format_func=lambda f: sidebar_topic_label(f, progress),
-                    )
-                    if str(topic_choice) != str(topic_path):
-                        topic_path = topic_choice
-
         render_topic_detail(topic_path, part_key)
+    else:
+        st.session_state.active_topic = None
+        st.rerun()
 
 elif nav_mode == "search" and chosen_path:
     part_key = resolve_part_key(chosen_path)
